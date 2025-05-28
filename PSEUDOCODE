@@ -1,0 +1,45 @@
+1. IDEFINE Blynk template credentials
+2. Include necessary libraries (WiFi, Blynk, RTC, LCD)
+3. INITIALIZE:
+- RTC module
+- LCD with 12C
+- Pins for PIR sensor, relays, physical switch
+4. SET system state variables:
+- lastMotionTime = 0
+- motionTimeout = 30 seconds
+- systemOn = false
+- systemSleeping = false
+- blynkEnabled = true
+5. CONNECT to WiFi and Blynk
+6. DISPLAY “System ready” on LCD
+Loop forever:
+7. RUN Blynk background processes
+8. READ physical switch state
+9. IF (switch is OFF OR Blynk is OFF):
+- DISPLAY status on LCD
+- TURN OFF all relays
+- RESET systemOn and systemSleeping flags
+- WAIT briefly
+- SKIP rest of loop (return)
+10. IF (system is not ON and not sleeping):
+- DISPLAY “System ON” on LCD
+- TURN ON relays (motor and LED)
+- SET systemOn = true
+- RECORD current time as lastMotionTime
+11. IF (motion is detected);
+- UPDATE lastMotionTime
+- DISPLAY “Motion Detected”
+- ENSURE relays stay ON
+12. OIF (no motion for 30 seconds);
+- DISPLAY “Turning Off…” on LCD
+- TURN OFF relays
+- SET systemOn = false
+- SET systemSleeping = true
+13. IF (system is sleeping AND motion is detected again):
+- DISPLAY “System Re-On”
+- TURN ON relays
+- RESET systemSleeping = false
+- SET systemOn = true
+- UPDATE lastMotionTIme
+14. WAIT 200 ms before repeating
+END LOOP
